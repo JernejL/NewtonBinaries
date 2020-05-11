@@ -28,7 +28,7 @@
 // Define double to use newton in double precision
 
 {$undef double}
-{$i compiler.inc}
+{.$i compiler.inc} // uncomment if you use custom compiler defines.
 
 unit Newton;
 
@@ -37,7 +37,11 @@ interface
 uses windows; 
 
 const
+  {$ifdef Windows}
   newtondll = 'Newton.dll';
+  {$else}
+  newtondll = 'libnewton.so';
+  {$endif}
 
 type
 
