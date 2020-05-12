@@ -32,13 +32,15 @@
 
 unit Newton;
 
+{$MODE objfpc}{$H+}
+
 interface
 
 const
   {$ifdef Windows}
   newtondll = 'Newton.dll';
   {$else}
-  newtondll = 'libnewton.so';
+  newtondll = 'libNewton.so';
   {$endif}
 
 type
