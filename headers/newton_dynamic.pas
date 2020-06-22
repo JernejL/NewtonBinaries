@@ -42,7 +42,7 @@ const
   {$ifdef Windows}
   newtondll = 'Newton.dll';
   {$else}
-  newtondll = 'libNewton.so';
+  newtondll = 'libnewton.so';
   {$endif}
 
 type
