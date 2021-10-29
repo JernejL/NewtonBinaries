@@ -43,7 +43,7 @@
 					#ifdef _DEBUG
 						// Track all memory leaks at the operating system level.
 						// make sure no Newton tool or utility leaves leaks behind.
-						_CrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF|_CRTDBG_LEAK_CHECK_DF);
+						_CrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF | _CRTDBG_REPORT_FLAG);
 					#endif
 
 				case DLL_THREAD_DETACH:
@@ -6193,8 +6193,8 @@ void NewtonBallSetConeLimits(const NewtonJoint* const ball, const dFloat* pin, d
 		}
 	}
 	dgVector lateral (tmp.CrossProduct(coneAxis)); 
-	dgAssert(lateral.m_w = dgFloat32(0.0f));
-	dgAssert(coneAxis.m_w = dgFloat32(0.0f));
+	dgAssert(lateral.m_w == dgFloat32(0.0f));
+	dgAssert(coneAxis.m_w == dgFloat32(0.0f));
 	lateral = lateral.Normalize();
 	coneAxis = coneAxis.Normalize();
 
@@ -7288,11 +7288,18 @@ dFloat NewtonUserJointCalculateRowZeroAcceleration (const NewtonJoint* const joi
 
   See also: ::NewtonUserJointSetRowAcceleration, ::NewtonUserJointSetRowStiffness
 */
-void NewtonUserJointSetRowSpringDamperAcceleration(const NewtonJoint* const joint, dFloat rowStiffness, dFloat spring, dFloat damper)
+void NewtonUserJointSetRowMassIndependentSpringDamperAcceleration(const NewtonJoint* const joint, dFloat rowStiffness, dFloat spring, dFloat damper)
 {
 	TRACE_FUNCTION(__FUNCTION__);
 	NewtonUserJoint* const userJoint = (NewtonUserJoint*) joint;
-	userJoint->SetSpringDamperAcceleration (rowStiffness, spring, damper);
+	userJoint->SetMassIndependentSpringDamperAcceleration (rowStiffness, spring, damper);
+}
+
+void NewtonUserJointSetRowMassDependentSpringDamperAcceleration(const NewtonJoint* const joint, dFloat spring, dFloat damper)
+{
+	TRACE_FUNCTION(__FUNCTION__);
+	NewtonUserJoint* const userJoint = (NewtonUserJoint*)joint;
+	userJoint->SetMassDependentSpringDamperAcceleration(spring, damper);
 }
 
 /*!
@@ -7305,7 +7312,7 @@ void NewtonUserJointSetRowSpringDamperAcceleration(const NewtonJoint* const join
   the row stiffness is the percentage of the constraint force that will be applied to the rigid bodies. Ideally the value should be
   1.0 (100% stiff) but dues to numerical integration error this could be the joint a little unstable, and lower values are preferred.
 
-  See also: ::NewtonUserJointAddLinearRow, ::NewtonUserJointAddAngularRow, ::NewtonUserJointSetRowSpringDamperAcceleration
+  See also: ::NewtonUserJointAddLinearRow, ::NewtonUserJointAddAngularRow, ::NewtonUserJointSetMassIndependentRowSpringDamperAcceleration
 */
 void NewtonUserJointSetRowStiffness(const NewtonJoint* const joint, dFloat stiffness)
 {

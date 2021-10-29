@@ -1,4 +1,4 @@
-(* Copyright (c) <2003-2020> <Julio Jerez, Newton Game Dynamics>
+(* Copyright (c) <2003-2021> <Julio Jerez, Newton Game Dynamics>
 *
 * This software is provided 'as-is', without any express or implied
 * warranty. In no event will the authors be held liable for any damages
@@ -21,7 +21,7 @@
 
 { ********************************************************************** }
 { Automated Newton Pascal Header translation                             }
-{ Copyright 2005-2020 Jernej L.                                          }
+{ Copyright 2005-2021 Jernej L.                                          }
 { Type names are based on original work by S.Spasov(Sury)                }
 { ********************************************************************** }
 
@@ -80,7 +80,7 @@ type
 
 const
 	NEWTON_MAJOR_VERSION			=	3;
-	NEWTON_MINOR_VERSION			=	15;
+	NEWTON_MINOR_VERSION			=	14;
 	NEWTON_BROADPHASE_DEFAULT			=	0;
 	NEWTON_BROADPHASE_PERSINTENT			=	1;
 	NEWTON_DYNAMIC_BODY			=	0;
@@ -105,6 +105,310 @@ const
 
 
 type
+
+TNewtonMesh = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonMesh = ^TNewtonMesh;
+
+TNewtonBody = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonBody = ^TNewtonBody;
+
+TNewtonWorld = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonWorld = ^TNewtonWorld;
+
+TNewtonJoint = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonJoint = ^TNewtonJoint;
+
+TNewtonMaterial = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonMaterial = ^TNewtonMaterial;
+
+TNewtonCollision = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonCollision = ^TNewtonCollision;
+
+TNewtonDeformableMeshSegment = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonDeformableMeshSegment = ^TNewtonDeformableMeshSegment;
+
+TNewtonFracturedCompoundMeshPart = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonFracturedCompoundMeshPart = ^TNewtonFracturedCompoundMeshPart;
 
 TNewtonMaterialData = packed record
 case integer of
@@ -954,7 +1258,8 @@ function NewtonUserJointCalculateRowZeroAcceleration (const joint: PNewtonJoint)
 function NewtonUserJointGetRowAcceleration (const joint: PNewtonJoint): dfloat; cdecl; external newtondll;
 procedure NewtonUserJointGetRowJacobian (const joint: PNewtonJoint; const linear0: pfloat; const angula0: pfloat; const linear1: pfloat; const angula1: pfloat); cdecl; external newtondll;
 procedure NewtonUserJointSetRowAcceleration (const joint: PNewtonJoint; acceleration: dfloat); cdecl; external newtondll;
-procedure NewtonUserJointSetRowSpringDamperAcceleration (const joint: PNewtonJoint; rowStiffness: dfloat; spring: dfloat; damper: dfloat); cdecl; external newtondll;
+procedure NewtonUserJointSetRowMassDependentSpringDamperAcceleration (const joint: PNewtonJoint; spring: dfloat; damper: dfloat); cdecl; external newtondll;
+procedure NewtonUserJointSetRowMassIndependentSpringDamperAcceleration (const joint: PNewtonJoint; rowStiffness: dfloat; spring: dfloat; damper: dfloat); cdecl; external newtondll;
 procedure NewtonUserJointSetRowStiffness (const joint: PNewtonJoint; stiffness: dfloat); cdecl; external newtondll;
 function NewtonUserJoinRowsCount (const joint: PNewtonJoint): Integer; cdecl; external newtondll;
 procedure NewtonUserJointGetGeneralRow (const joint: PNewtonJoint; index: Integer; const jacobian0: pfloat; const jacobian1: pfloat); cdecl; external newtondll;

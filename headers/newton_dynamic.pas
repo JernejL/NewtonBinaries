@@ -1,4 +1,4 @@
-(* Copyright (c) <2003-2020> <Julio Jerez, Newton Game Dynamics>
+(* Copyright (c) <2003-2021> <Julio Jerez, Newton Game Dynamics>
 *
 * This software is provided 'as-is', without any express or implied
 * warranty. In no event will the authors be held liable for any damages
@@ -21,7 +21,7 @@
 
 { ********************************************************************** }
 { Automated Newton Pascal Header translation                             }
-{ Copyright 2005-2020 Jernej L.                                          }
+{ Copyright 2005-2021 Jernej L.                                          }
 { Type names are based on original work by S.Spasov(Sury)                }
 { ********************************************************************** }
 
@@ -82,7 +82,7 @@ type
 
 const
 	NEWTON_MAJOR_VERSION			=	3;
-	NEWTON_MINOR_VERSION			=	15;
+	NEWTON_MINOR_VERSION			=	14;
 	NEWTON_BROADPHASE_DEFAULT			=	0;
 	NEWTON_BROADPHASE_PERSINTENT			=	1;
 	NEWTON_DYNAMIC_BODY			=	0;
@@ -107,6 +107,310 @@ const
 
 
 type
+
+TNewtonMesh = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonMesh = ^TNewtonMesh;
+
+TNewtonBody = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonBody = ^TNewtonBody;
+
+TNewtonWorld = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonWorld = ^TNewtonWorld;
+
+TNewtonJoint = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonJoint = ^TNewtonJoint;
+
+TNewtonMaterial = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonMaterial = ^TNewtonMaterial;
+
+TNewtonCollision = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonCollision = ^TNewtonCollision;
+
+TNewtonDeformableMeshSegment = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonDeformableMeshSegment = ^TNewtonDeformableMeshSegment;
+
+TNewtonFracturedCompoundMeshPart = packed record
+	m_offsetMatrix: array[0..3, 0..3] of single;
+	m_collisionMaterial: TNewtonCollisionMaterial;
+	m_collisionType: integer;
+	case integer of
+	SERIALIZE_ID_BOX:
+	(shapedatabox: TNewtonBoxParam);
+	SERIALIZE_ID_CONE:
+	(shapedata: TNewtonConeParam);
+	SERIALIZE_ID_SPHERE:
+	(shapedatasphere: TNewtonSphereParam);
+	SERIALIZE_ID_CAPSULE:
+	(shapedatacapsule: TNewtonCapsuleParam);
+	SERIALIZE_ID_CYLINDER:
+	(shapedatacylinder: TNewtonCylinderParam);
+	//SERIALIZE_ID_TAPEREDCAPSULE:
+	//(m_taperedCapsule: TNewtonTaperedCapsuleParam);
+	//SERIALIZE_ID_TAPEREDCYLINDER:
+	//(m_taperedCylinder: TNewtonTaperedCylinderParam);
+	SERIALIZE_ID_CHAMFERCYLINDER:
+	(shapedatachamfercylinder: TNewtonChamferCylinderParam);
+	SERIALIZE_ID_CONVEXHULL:
+	(shapedataconvexhull: TNewtonConvexHullParam);
+	SERIALIZE_ID_DEFORMABLE_SOLID:
+	(m_deformableMesh: TNewtonDeformableMeshParam);
+	SERIALIZE_ID_COMPOUND:
+	(shapedatacompound: TNewtonCompoundCollisionParam);
+	SERIALIZE_ID_TREE:
+	(shapedatatree: TNewtonCollisionTreeParam);
+	SERIALIZE_ID_HEIGHTFIELD:
+	(shapedataheightfield: TNewtonHeightFieldCollisionParam);
+	SERIALIZE_ID_SCENE:
+	(shapedatascenecollision: TNewtonSceneCollisionParam);
+	SERIALIZE_ID_USERMESH:
+	(m_paramArray: array[0..63] of float);
+end;
+PNewtonFracturedCompoundMeshPart = ^TNewtonFracturedCompoundMeshPart;
 
 TNewtonMaterialData = packed record
 case integer of
@@ -960,7 +1264,8 @@ NewtonUserJointCalculateRowZeroAcceleration: function (const joint: PNewtonJoint
 NewtonUserJointGetRowAcceleration: function (const joint: PNewtonJoint): dfloat; cdecl;
 NewtonUserJointGetRowJacobian: procedure (const joint: PNewtonJoint; const linear0: pfloat; const angula0: pfloat; const linear1: pfloat; const angula1: pfloat); cdecl;
 NewtonUserJointSetRowAcceleration: procedure (const joint: PNewtonJoint; acceleration: dfloat); cdecl;
-NewtonUserJointSetRowSpringDamperAcceleration: procedure (const joint: PNewtonJoint; rowStiffness: dfloat; spring: dfloat; damper: dfloat); cdecl;
+NewtonUserJointSetRowMassDependentSpringDamperAcceleration: procedure (const joint: PNewtonJoint; spring: dfloat; damper: dfloat); cdecl;
+NewtonUserJointSetRowMassIndependentSpringDamperAcceleration: procedure (const joint: PNewtonJoint; rowStiffness: dfloat; spring: dfloat; damper: dfloat); cdecl;
 NewtonUserJointSetRowStiffness: procedure (const joint: PNewtonJoint; stiffness: dfloat); cdecl;
 NewtonUserJoinRowsCount: function (const joint: PNewtonJoint): Integer; cdecl;
 NewtonUserJointGetGeneralRow: procedure (const joint: PNewtonJoint; index: Integer; const jacobian0: pfloat; const jacobian1: pfloat); cdecl;
@@ -1070,7 +1375,7 @@ NewtonMeshGetFacePointIndices: procedure (const mesh: PNewtonMesh; const face: P
 NewtonMeshCalculateFaceNormal: procedure (const mesh: PNewtonMesh; const face: Pointer; const normal: Pdouble); cdecl;
 NewtonMeshSetFaceMaterial: procedure (const mesh: PNewtonMesh; const face: Pointer; matId: Integer); cdecl;
 
-linked_functions : array[0..508] of TNewtonFuncLinkRecord = (
+linked_functions : array[0..509] of TNewtonFuncLinkRecord = (
 	( function_name: 'NewtonWorldGetVersion'; function_ptr: nil ), 
 	( function_name: 'NewtonWorldFloatSize'; function_ptr: nil ), 
 	( function_name: 'NewtonGetMemoryUsed'; function_ptr: nil ), 
@@ -1472,7 +1777,8 @@ linked_functions : array[0..508] of TNewtonFuncLinkRecord = (
 	( function_name: 'NewtonUserJointGetRowAcceleration'; function_ptr: nil ), 
 	( function_name: 'NewtonUserJointGetRowJacobian'; function_ptr: nil ), 
 	( function_name: 'NewtonUserJointSetRowAcceleration'; function_ptr: nil ), 
-	( function_name: 'NewtonUserJointSetRowSpringDamperAcceleration'; function_ptr: nil ), 
+	( function_name: 'NewtonUserJointSetRowMassDependentSpringDamperAcceleration'; function_ptr: nil ), 
+	( function_name: 'NewtonUserJointSetRowMassIndependentSpringDamperAcceleration'; function_ptr: nil ), 
 	( function_name: 'NewtonUserJointSetRowStiffness'; function_ptr: nil ), 
 	( function_name: 'NewtonUserJoinRowsCount'; function_ptr: nil ), 
 	( function_name: 'NewtonUserJointGetGeneralRow'; function_ptr: nil ), 
@@ -2393,222 +2699,224 @@ begin
 	NewtonUserJointGetRowJacobian:= linked_functions[399].function_ptr;
 	linked_functions[400].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJointSetRowAcceleration');
 	NewtonUserJointSetRowAcceleration:= linked_functions[400].function_ptr;
-	linked_functions[401].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJointSetRowSpringDamperAcceleration');
-	NewtonUserJointSetRowSpringDamperAcceleration:= linked_functions[401].function_ptr;
-	linked_functions[402].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJointSetRowStiffness');
-	NewtonUserJointSetRowStiffness:= linked_functions[402].function_ptr;
-	linked_functions[403].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJoinRowsCount');
-	NewtonUserJoinRowsCount:= linked_functions[403].function_ptr;
-	linked_functions[404].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJointGetGeneralRow');
-	NewtonUserJointGetGeneralRow:= linked_functions[404].function_ptr;
-	linked_functions[405].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJointGetRowForce');
-	NewtonUserJointGetRowForce:= linked_functions[405].function_ptr;
-	linked_functions[406].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreate');
-	NewtonMeshCreate:= linked_functions[406].function_ptr;
-	linked_functions[407].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateFromMesh');
-	NewtonMeshCreateFromMesh:= linked_functions[407].function_ptr;
-	linked_functions[408].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateFromCollision');
-	NewtonMeshCreateFromCollision:= linked_functions[408].function_ptr;
-	linked_functions[409].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateTetrahedraIsoSurface');
-	NewtonMeshCreateTetrahedraIsoSurface:= linked_functions[409].function_ptr;
-	linked_functions[410].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateConvexHull');
-	NewtonMeshCreateConvexHull:= linked_functions[410].function_ptr;
-	linked_functions[411].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateVoronoiConvexDecomposition');
-	NewtonMeshCreateVoronoiConvexDecomposition:= linked_functions[411].function_ptr;
-	linked_functions[412].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateFromSerialization');
-	NewtonMeshCreateFromSerialization:= linked_functions[412].function_ptr;
-	linked_functions[413].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshDestroy');
-	NewtonMeshDestroy:= linked_functions[413].function_ptr;
-	linked_functions[414].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshSerialize');
-	NewtonMeshSerialize:= linked_functions[414].function_ptr;
-	linked_functions[415].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshSaveOFF');
-	NewtonMeshSaveOFF:= linked_functions[415].function_ptr;
-	linked_functions[416].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshLoadOFF');
-	NewtonMeshLoadOFF:= linked_functions[416].function_ptr;
-	linked_functions[417].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshLoadTetrahedraMesh');
-	NewtonMeshLoadTetrahedraMesh:= linked_functions[417].function_ptr;
-	linked_functions[418].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshFlipWinding');
-	NewtonMeshFlipWinding:= linked_functions[418].function_ptr;
-	linked_functions[419].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApplyTransform');
-	NewtonMeshApplyTransform:= linked_functions[419].function_ptr;
-	linked_functions[420].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCalculateOOBB');
-	NewtonMeshCalculateOOBB:= linked_functions[420].function_ptr;
-	linked_functions[421].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCalculateVertexNormals');
-	NewtonMeshCalculateVertexNormals:= linked_functions[421].function_ptr;
-	linked_functions[422].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApplySphericalMapping');
-	NewtonMeshApplySphericalMapping:= linked_functions[422].function_ptr;
-	linked_functions[423].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApplyCylindricalMapping');
-	NewtonMeshApplyCylindricalMapping:= linked_functions[423].function_ptr;
-	linked_functions[424].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApplyBoxMapping');
-	NewtonMeshApplyBoxMapping:= linked_functions[424].function_ptr;
-	linked_functions[425].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApplyAngleBasedMapping');
-	NewtonMeshApplyAngleBasedMapping:= linked_functions[425].function_ptr;
-	linked_functions[426].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonCreateTetrahedraLinearBlendSkinWeightsChannel');
-	NewtonCreateTetrahedraLinearBlendSkinWeightsChannel:= linked_functions[426].function_ptr;
-	linked_functions[427].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshOptimize');
-	NewtonMeshOptimize:= linked_functions[427].function_ptr;
-	linked_functions[428].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshOptimizePoints');
-	NewtonMeshOptimizePoints:= linked_functions[428].function_ptr;
-	linked_functions[429].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshOptimizeVertex');
-	NewtonMeshOptimizeVertex:= linked_functions[429].function_ptr;
-	linked_functions[430].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshIsOpenMesh');
-	NewtonMeshIsOpenMesh:= linked_functions[430].function_ptr;
-	linked_functions[431].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshFixTJoints');
-	NewtonMeshFixTJoints:= linked_functions[431].function_ptr;
-	linked_functions[432].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshPolygonize');
-	NewtonMeshPolygonize:= linked_functions[432].function_ptr;
-	linked_functions[433].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshTriangulate');
-	NewtonMeshTriangulate:= linked_functions[433].function_ptr;
-	linked_functions[434].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshUnion');
-	NewtonMeshUnion:= linked_functions[434].function_ptr;
-	linked_functions[435].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshDifference');
-	NewtonMeshDifference:= linked_functions[435].function_ptr;
-	linked_functions[436].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshIntersection');
-	NewtonMeshIntersection:= linked_functions[436].function_ptr;
-	linked_functions[437].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshClip');
-	NewtonMeshClip:= linked_functions[437].function_ptr;
-	linked_functions[438].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshConvexMeshIntersection');
-	NewtonMeshConvexMeshIntersection:= linked_functions[438].function_ptr;
-	linked_functions[439].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshSimplify');
-	NewtonMeshSimplify:= linked_functions[439].function_ptr;
-	linked_functions[440].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApproximateConvexDecomposition');
-	NewtonMeshApproximateConvexDecomposition:= linked_functions[440].function_ptr;
-	linked_functions[441].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonRemoveUnusedVertices');
-	NewtonRemoveUnusedVertices:= linked_functions[441].function_ptr;
-	linked_functions[442].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshBeginBuild');
-	NewtonMeshBeginBuild:= linked_functions[442].function_ptr;
-	linked_functions[443].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshBeginFace');
-	NewtonMeshBeginFace:= linked_functions[443].function_ptr;
-	linked_functions[444].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddPoint');
-	NewtonMeshAddPoint:= linked_functions[444].function_ptr;
-	linked_functions[445].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddLayer');
-	NewtonMeshAddLayer:= linked_functions[445].function_ptr;
-	linked_functions[446].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddMaterial');
-	NewtonMeshAddMaterial:= linked_functions[446].function_ptr;
-	linked_functions[447].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddNormal');
-	NewtonMeshAddNormal:= linked_functions[447].function_ptr;
-	linked_functions[448].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddBinormal');
-	NewtonMeshAddBinormal:= linked_functions[448].function_ptr;
-	linked_functions[449].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddUV0');
-	NewtonMeshAddUV0:= linked_functions[449].function_ptr;
-	linked_functions[450].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddUV1');
-	NewtonMeshAddUV1:= linked_functions[450].function_ptr;
-	linked_functions[451].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddVertexColor');
-	NewtonMeshAddVertexColor:= linked_functions[451].function_ptr;
-	linked_functions[452].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshEndFace');
-	NewtonMeshEndFace:= linked_functions[452].function_ptr;
-	linked_functions[453].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshEndBuild');
-	NewtonMeshEndBuild:= linked_functions[453].function_ptr;
-	linked_functions[454].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshClearVertexFormat');
-	NewtonMeshClearVertexFormat:= linked_functions[454].function_ptr;
-	linked_functions[455].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshBuildFromVertexListIndexList');
-	NewtonMeshBuildFromVertexListIndexList:= linked_functions[455].function_ptr;
-	linked_functions[456].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetPointCount');
-	NewtonMeshGetPointCount:= linked_functions[456].function_ptr;
-	linked_functions[457].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetIndexToVertexMap');
-	NewtonMeshGetIndexToVertexMap:= linked_functions[457].function_ptr;
-	linked_functions[458].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexDoubleChannel');
-	NewtonMeshGetVertexDoubleChannel:= linked_functions[458].function_ptr;
-	linked_functions[459].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexChannel');
-	NewtonMeshGetVertexChannel:= linked_functions[459].function_ptr;
-	linked_functions[460].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetNormalChannel');
-	NewtonMeshGetNormalChannel:= linked_functions[460].function_ptr;
-	linked_functions[461].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetBinormalChannel');
-	NewtonMeshGetBinormalChannel:= linked_functions[461].function_ptr;
-	linked_functions[462].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetUV0Channel');
-	NewtonMeshGetUV0Channel:= linked_functions[462].function_ptr;
-	linked_functions[463].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetUV1Channel');
-	NewtonMeshGetUV1Channel:= linked_functions[463].function_ptr;
-	linked_functions[464].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexColorChannel');
-	NewtonMeshGetVertexColorChannel:= linked_functions[464].function_ptr;
-	linked_functions[465].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshHasNormalChannel');
-	NewtonMeshHasNormalChannel:= linked_functions[465].function_ptr;
-	linked_functions[466].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshHasBinormalChannel');
-	NewtonMeshHasBinormalChannel:= linked_functions[466].function_ptr;
-	linked_functions[467].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshHasUV0Channel');
-	NewtonMeshHasUV0Channel:= linked_functions[467].function_ptr;
-	linked_functions[468].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshHasUV1Channel');
-	NewtonMeshHasUV1Channel:= linked_functions[468].function_ptr;
-	linked_functions[469].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshHasVertexColorChannel');
-	NewtonMeshHasVertexColorChannel:= linked_functions[469].function_ptr;
-	linked_functions[470].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshBeginHandle');
-	NewtonMeshBeginHandle:= linked_functions[470].function_ptr;
-	linked_functions[471].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshEndHandle');
-	NewtonMeshEndHandle:= linked_functions[471].function_ptr;
-	linked_functions[472].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshFirstMaterial');
-	NewtonMeshFirstMaterial:= linked_functions[472].function_ptr;
-	linked_functions[473].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshNextMaterial');
-	NewtonMeshNextMaterial:= linked_functions[473].function_ptr;
-	linked_functions[474].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshMaterialGetMaterial');
-	NewtonMeshMaterialGetMaterial:= linked_functions[474].function_ptr;
-	linked_functions[475].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshMaterialGetIndexCount');
-	NewtonMeshMaterialGetIndexCount:= linked_functions[475].function_ptr;
-	linked_functions[476].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshMaterialGetIndexStream');
-	NewtonMeshMaterialGetIndexStream:= linked_functions[476].function_ptr;
-	linked_functions[477].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshMaterialGetIndexStreamShort');
-	NewtonMeshMaterialGetIndexStreamShort:= linked_functions[477].function_ptr;
-	linked_functions[478].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateFirstSingleSegment');
-	NewtonMeshCreateFirstSingleSegment:= linked_functions[478].function_ptr;
-	linked_functions[479].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateNextSingleSegment');
-	NewtonMeshCreateNextSingleSegment:= linked_functions[479].function_ptr;
-	linked_functions[480].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateFirstLayer');
-	NewtonMeshCreateFirstLayer:= linked_functions[480].function_ptr;
-	linked_functions[481].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateNextLayer');
-	NewtonMeshCreateNextLayer:= linked_functions[481].function_ptr;
-	linked_functions[482].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetTotalFaceCount');
-	NewtonMeshGetTotalFaceCount:= linked_functions[482].function_ptr;
-	linked_functions[483].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetTotalIndexCount');
-	NewtonMeshGetTotalIndexCount:= linked_functions[483].function_ptr;
-	linked_functions[484].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFaces');
-	NewtonMeshGetFaces:= linked_functions[484].function_ptr;
-	linked_functions[485].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexCount');
-	NewtonMeshGetVertexCount:= linked_functions[485].function_ptr;
-	linked_functions[486].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexStrideInByte');
-	NewtonMeshGetVertexStrideInByte:= linked_functions[486].function_ptr;
-	linked_functions[487].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexArray');
-	NewtonMeshGetVertexArray:= linked_functions[487].function_ptr;
-	linked_functions[488].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexBaseCount');
-	NewtonMeshGetVertexBaseCount:= linked_functions[488].function_ptr;
-	linked_functions[489].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshSetVertexBaseCount');
-	NewtonMeshSetVertexBaseCount:= linked_functions[489].function_ptr;
-	linked_functions[490].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFirstVertex');
-	NewtonMeshGetFirstVertex:= linked_functions[490].function_ptr;
-	linked_functions[491].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetNextVertex');
-	NewtonMeshGetNextVertex:= linked_functions[491].function_ptr;
-	linked_functions[492].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexIndex');
-	NewtonMeshGetVertexIndex:= linked_functions[492].function_ptr;
-	linked_functions[493].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFirstPoint');
-	NewtonMeshGetFirstPoint:= linked_functions[493].function_ptr;
-	linked_functions[494].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetNextPoint');
-	NewtonMeshGetNextPoint:= linked_functions[494].function_ptr;
-	linked_functions[495].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetPointIndex');
-	NewtonMeshGetPointIndex:= linked_functions[495].function_ptr;
-	linked_functions[496].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexIndexFromPoint');
-	NewtonMeshGetVertexIndexFromPoint:= linked_functions[496].function_ptr;
-	linked_functions[497].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFirstEdge');
-	NewtonMeshGetFirstEdge:= linked_functions[497].function_ptr;
-	linked_functions[498].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetNextEdge');
-	NewtonMeshGetNextEdge:= linked_functions[498].function_ptr;
-	linked_functions[499].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetEdgeIndices');
-	NewtonMeshGetEdgeIndices:= linked_functions[499].function_ptr;
-	linked_functions[500].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFirstFace');
-	NewtonMeshGetFirstFace:= linked_functions[500].function_ptr;
-	linked_functions[501].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetNextFace');
-	NewtonMeshGetNextFace:= linked_functions[501].function_ptr;
-	linked_functions[502].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshIsFaceOpen');
-	NewtonMeshIsFaceOpen:= linked_functions[502].function_ptr;
-	linked_functions[503].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFaceMaterial');
-	NewtonMeshGetFaceMaterial:= linked_functions[503].function_ptr;
-	linked_functions[504].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFaceIndexCount');
-	NewtonMeshGetFaceIndexCount:= linked_functions[504].function_ptr;
-	linked_functions[505].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFaceIndices');
-	NewtonMeshGetFaceIndices:= linked_functions[505].function_ptr;
-	linked_functions[506].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFacePointIndices');
-	NewtonMeshGetFacePointIndices:= linked_functions[506].function_ptr;
-	linked_functions[507].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCalculateFaceNormal');
-	NewtonMeshCalculateFaceNormal:= linked_functions[507].function_ptr;
-	linked_functions[508].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshSetFaceMaterial');
-	NewtonMeshSetFaceMaterial:= linked_functions[508].function_ptr;
+	linked_functions[401].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJointSetRowMassDependentSpringDamperAcceleration');
+	NewtonUserJointSetRowMassDependentSpringDamperAcceleration:= linked_functions[401].function_ptr;
+	linked_functions[402].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJointSetRowMassIndependentSpringDamperAcceleration');
+	NewtonUserJointSetRowMassIndependentSpringDamperAcceleration:= linked_functions[402].function_ptr;
+	linked_functions[403].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJointSetRowStiffness');
+	NewtonUserJointSetRowStiffness:= linked_functions[403].function_ptr;
+	linked_functions[404].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJoinRowsCount');
+	NewtonUserJoinRowsCount:= linked_functions[404].function_ptr;
+	linked_functions[405].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJointGetGeneralRow');
+	NewtonUserJointGetGeneralRow:= linked_functions[405].function_ptr;
+	linked_functions[406].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonUserJointGetRowForce');
+	NewtonUserJointGetRowForce:= linked_functions[406].function_ptr;
+	linked_functions[407].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreate');
+	NewtonMeshCreate:= linked_functions[407].function_ptr;
+	linked_functions[408].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateFromMesh');
+	NewtonMeshCreateFromMesh:= linked_functions[408].function_ptr;
+	linked_functions[409].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateFromCollision');
+	NewtonMeshCreateFromCollision:= linked_functions[409].function_ptr;
+	linked_functions[410].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateTetrahedraIsoSurface');
+	NewtonMeshCreateTetrahedraIsoSurface:= linked_functions[410].function_ptr;
+	linked_functions[411].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateConvexHull');
+	NewtonMeshCreateConvexHull:= linked_functions[411].function_ptr;
+	linked_functions[412].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateVoronoiConvexDecomposition');
+	NewtonMeshCreateVoronoiConvexDecomposition:= linked_functions[412].function_ptr;
+	linked_functions[413].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateFromSerialization');
+	NewtonMeshCreateFromSerialization:= linked_functions[413].function_ptr;
+	linked_functions[414].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshDestroy');
+	NewtonMeshDestroy:= linked_functions[414].function_ptr;
+	linked_functions[415].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshSerialize');
+	NewtonMeshSerialize:= linked_functions[415].function_ptr;
+	linked_functions[416].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshSaveOFF');
+	NewtonMeshSaveOFF:= linked_functions[416].function_ptr;
+	linked_functions[417].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshLoadOFF');
+	NewtonMeshLoadOFF:= linked_functions[417].function_ptr;
+	linked_functions[418].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshLoadTetrahedraMesh');
+	NewtonMeshLoadTetrahedraMesh:= linked_functions[418].function_ptr;
+	linked_functions[419].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshFlipWinding');
+	NewtonMeshFlipWinding:= linked_functions[419].function_ptr;
+	linked_functions[420].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApplyTransform');
+	NewtonMeshApplyTransform:= linked_functions[420].function_ptr;
+	linked_functions[421].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCalculateOOBB');
+	NewtonMeshCalculateOOBB:= linked_functions[421].function_ptr;
+	linked_functions[422].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCalculateVertexNormals');
+	NewtonMeshCalculateVertexNormals:= linked_functions[422].function_ptr;
+	linked_functions[423].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApplySphericalMapping');
+	NewtonMeshApplySphericalMapping:= linked_functions[423].function_ptr;
+	linked_functions[424].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApplyCylindricalMapping');
+	NewtonMeshApplyCylindricalMapping:= linked_functions[424].function_ptr;
+	linked_functions[425].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApplyBoxMapping');
+	NewtonMeshApplyBoxMapping:= linked_functions[425].function_ptr;
+	linked_functions[426].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApplyAngleBasedMapping');
+	NewtonMeshApplyAngleBasedMapping:= linked_functions[426].function_ptr;
+	linked_functions[427].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonCreateTetrahedraLinearBlendSkinWeightsChannel');
+	NewtonCreateTetrahedraLinearBlendSkinWeightsChannel:= linked_functions[427].function_ptr;
+	linked_functions[428].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshOptimize');
+	NewtonMeshOptimize:= linked_functions[428].function_ptr;
+	linked_functions[429].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshOptimizePoints');
+	NewtonMeshOptimizePoints:= linked_functions[429].function_ptr;
+	linked_functions[430].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshOptimizeVertex');
+	NewtonMeshOptimizeVertex:= linked_functions[430].function_ptr;
+	linked_functions[431].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshIsOpenMesh');
+	NewtonMeshIsOpenMesh:= linked_functions[431].function_ptr;
+	linked_functions[432].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshFixTJoints');
+	NewtonMeshFixTJoints:= linked_functions[432].function_ptr;
+	linked_functions[433].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshPolygonize');
+	NewtonMeshPolygonize:= linked_functions[433].function_ptr;
+	linked_functions[434].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshTriangulate');
+	NewtonMeshTriangulate:= linked_functions[434].function_ptr;
+	linked_functions[435].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshUnion');
+	NewtonMeshUnion:= linked_functions[435].function_ptr;
+	linked_functions[436].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshDifference');
+	NewtonMeshDifference:= linked_functions[436].function_ptr;
+	linked_functions[437].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshIntersection');
+	NewtonMeshIntersection:= linked_functions[437].function_ptr;
+	linked_functions[438].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshClip');
+	NewtonMeshClip:= linked_functions[438].function_ptr;
+	linked_functions[439].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshConvexMeshIntersection');
+	NewtonMeshConvexMeshIntersection:= linked_functions[439].function_ptr;
+	linked_functions[440].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshSimplify');
+	NewtonMeshSimplify:= linked_functions[440].function_ptr;
+	linked_functions[441].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshApproximateConvexDecomposition');
+	NewtonMeshApproximateConvexDecomposition:= linked_functions[441].function_ptr;
+	linked_functions[442].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonRemoveUnusedVertices');
+	NewtonRemoveUnusedVertices:= linked_functions[442].function_ptr;
+	linked_functions[443].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshBeginBuild');
+	NewtonMeshBeginBuild:= linked_functions[443].function_ptr;
+	linked_functions[444].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshBeginFace');
+	NewtonMeshBeginFace:= linked_functions[444].function_ptr;
+	linked_functions[445].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddPoint');
+	NewtonMeshAddPoint:= linked_functions[445].function_ptr;
+	linked_functions[446].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddLayer');
+	NewtonMeshAddLayer:= linked_functions[446].function_ptr;
+	linked_functions[447].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddMaterial');
+	NewtonMeshAddMaterial:= linked_functions[447].function_ptr;
+	linked_functions[448].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddNormal');
+	NewtonMeshAddNormal:= linked_functions[448].function_ptr;
+	linked_functions[449].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddBinormal');
+	NewtonMeshAddBinormal:= linked_functions[449].function_ptr;
+	linked_functions[450].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddUV0');
+	NewtonMeshAddUV0:= linked_functions[450].function_ptr;
+	linked_functions[451].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddUV1');
+	NewtonMeshAddUV1:= linked_functions[451].function_ptr;
+	linked_functions[452].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshAddVertexColor');
+	NewtonMeshAddVertexColor:= linked_functions[452].function_ptr;
+	linked_functions[453].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshEndFace');
+	NewtonMeshEndFace:= linked_functions[453].function_ptr;
+	linked_functions[454].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshEndBuild');
+	NewtonMeshEndBuild:= linked_functions[454].function_ptr;
+	linked_functions[455].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshClearVertexFormat');
+	NewtonMeshClearVertexFormat:= linked_functions[455].function_ptr;
+	linked_functions[456].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshBuildFromVertexListIndexList');
+	NewtonMeshBuildFromVertexListIndexList:= linked_functions[456].function_ptr;
+	linked_functions[457].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetPointCount');
+	NewtonMeshGetPointCount:= linked_functions[457].function_ptr;
+	linked_functions[458].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetIndexToVertexMap');
+	NewtonMeshGetIndexToVertexMap:= linked_functions[458].function_ptr;
+	linked_functions[459].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexDoubleChannel');
+	NewtonMeshGetVertexDoubleChannel:= linked_functions[459].function_ptr;
+	linked_functions[460].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexChannel');
+	NewtonMeshGetVertexChannel:= linked_functions[460].function_ptr;
+	linked_functions[461].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetNormalChannel');
+	NewtonMeshGetNormalChannel:= linked_functions[461].function_ptr;
+	linked_functions[462].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetBinormalChannel');
+	NewtonMeshGetBinormalChannel:= linked_functions[462].function_ptr;
+	linked_functions[463].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetUV0Channel');
+	NewtonMeshGetUV0Channel:= linked_functions[463].function_ptr;
+	linked_functions[464].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetUV1Channel');
+	NewtonMeshGetUV1Channel:= linked_functions[464].function_ptr;
+	linked_functions[465].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexColorChannel');
+	NewtonMeshGetVertexColorChannel:= linked_functions[465].function_ptr;
+	linked_functions[466].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshHasNormalChannel');
+	NewtonMeshHasNormalChannel:= linked_functions[466].function_ptr;
+	linked_functions[467].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshHasBinormalChannel');
+	NewtonMeshHasBinormalChannel:= linked_functions[467].function_ptr;
+	linked_functions[468].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshHasUV0Channel');
+	NewtonMeshHasUV0Channel:= linked_functions[468].function_ptr;
+	linked_functions[469].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshHasUV1Channel');
+	NewtonMeshHasUV1Channel:= linked_functions[469].function_ptr;
+	linked_functions[470].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshHasVertexColorChannel');
+	NewtonMeshHasVertexColorChannel:= linked_functions[470].function_ptr;
+	linked_functions[471].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshBeginHandle');
+	NewtonMeshBeginHandle:= linked_functions[471].function_ptr;
+	linked_functions[472].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshEndHandle');
+	NewtonMeshEndHandle:= linked_functions[472].function_ptr;
+	linked_functions[473].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshFirstMaterial');
+	NewtonMeshFirstMaterial:= linked_functions[473].function_ptr;
+	linked_functions[474].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshNextMaterial');
+	NewtonMeshNextMaterial:= linked_functions[474].function_ptr;
+	linked_functions[475].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshMaterialGetMaterial');
+	NewtonMeshMaterialGetMaterial:= linked_functions[475].function_ptr;
+	linked_functions[476].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshMaterialGetIndexCount');
+	NewtonMeshMaterialGetIndexCount:= linked_functions[476].function_ptr;
+	linked_functions[477].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshMaterialGetIndexStream');
+	NewtonMeshMaterialGetIndexStream:= linked_functions[477].function_ptr;
+	linked_functions[478].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshMaterialGetIndexStreamShort');
+	NewtonMeshMaterialGetIndexStreamShort:= linked_functions[478].function_ptr;
+	linked_functions[479].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateFirstSingleSegment');
+	NewtonMeshCreateFirstSingleSegment:= linked_functions[479].function_ptr;
+	linked_functions[480].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateNextSingleSegment');
+	NewtonMeshCreateNextSingleSegment:= linked_functions[480].function_ptr;
+	linked_functions[481].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateFirstLayer');
+	NewtonMeshCreateFirstLayer:= linked_functions[481].function_ptr;
+	linked_functions[482].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCreateNextLayer');
+	NewtonMeshCreateNextLayer:= linked_functions[482].function_ptr;
+	linked_functions[483].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetTotalFaceCount');
+	NewtonMeshGetTotalFaceCount:= linked_functions[483].function_ptr;
+	linked_functions[484].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetTotalIndexCount');
+	NewtonMeshGetTotalIndexCount:= linked_functions[484].function_ptr;
+	linked_functions[485].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFaces');
+	NewtonMeshGetFaces:= linked_functions[485].function_ptr;
+	linked_functions[486].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexCount');
+	NewtonMeshGetVertexCount:= linked_functions[486].function_ptr;
+	linked_functions[487].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexStrideInByte');
+	NewtonMeshGetVertexStrideInByte:= linked_functions[487].function_ptr;
+	linked_functions[488].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexArray');
+	NewtonMeshGetVertexArray:= linked_functions[488].function_ptr;
+	linked_functions[489].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexBaseCount');
+	NewtonMeshGetVertexBaseCount:= linked_functions[489].function_ptr;
+	linked_functions[490].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshSetVertexBaseCount');
+	NewtonMeshSetVertexBaseCount:= linked_functions[490].function_ptr;
+	linked_functions[491].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFirstVertex');
+	NewtonMeshGetFirstVertex:= linked_functions[491].function_ptr;
+	linked_functions[492].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetNextVertex');
+	NewtonMeshGetNextVertex:= linked_functions[492].function_ptr;
+	linked_functions[493].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexIndex');
+	NewtonMeshGetVertexIndex:= linked_functions[493].function_ptr;
+	linked_functions[494].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFirstPoint');
+	NewtonMeshGetFirstPoint:= linked_functions[494].function_ptr;
+	linked_functions[495].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetNextPoint');
+	NewtonMeshGetNextPoint:= linked_functions[495].function_ptr;
+	linked_functions[496].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetPointIndex');
+	NewtonMeshGetPointIndex:= linked_functions[496].function_ptr;
+	linked_functions[497].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetVertexIndexFromPoint');
+	NewtonMeshGetVertexIndexFromPoint:= linked_functions[497].function_ptr;
+	linked_functions[498].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFirstEdge');
+	NewtonMeshGetFirstEdge:= linked_functions[498].function_ptr;
+	linked_functions[499].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetNextEdge');
+	NewtonMeshGetNextEdge:= linked_functions[499].function_ptr;
+	linked_functions[500].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetEdgeIndices');
+	NewtonMeshGetEdgeIndices:= linked_functions[500].function_ptr;
+	linked_functions[501].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFirstFace');
+	NewtonMeshGetFirstFace:= linked_functions[501].function_ptr;
+	linked_functions[502].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetNextFace');
+	NewtonMeshGetNextFace:= linked_functions[502].function_ptr;
+	linked_functions[503].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshIsFaceOpen');
+	NewtonMeshIsFaceOpen:= linked_functions[503].function_ptr;
+	linked_functions[504].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFaceMaterial');
+	NewtonMeshGetFaceMaterial:= linked_functions[504].function_ptr;
+	linked_functions[505].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFaceIndexCount');
+	NewtonMeshGetFaceIndexCount:= linked_functions[505].function_ptr;
+	linked_functions[506].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFaceIndices');
+	NewtonMeshGetFaceIndices:= linked_functions[506].function_ptr;
+	linked_functions[507].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshGetFacePointIndices');
+	NewtonMeshGetFacePointIndices:= linked_functions[507].function_ptr;
+	linked_functions[508].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshCalculateFaceNormal');
+	NewtonMeshCalculateFaceNormal:= linked_functions[508].function_ptr;
+	linked_functions[509].function_ptr := dynlibs.GetProcAddress(NewtonLibrary, 'NewtonMeshSetFaceMaterial');
+	NewtonMeshSetFaceMaterial:= linked_functions[509].function_ptr;
 end;
 
 end.
